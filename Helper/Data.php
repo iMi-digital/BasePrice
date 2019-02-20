@@ -145,6 +145,34 @@ class Data extends AbstractHelper
     }
 
     /**
+     * Returns the base price for a tier price by its ID.
+     * @param Product $product
+     * @param int $tierPriceID
+     *
+     * @return string
+     */
+    public function getTierBasePriceText(Product $product, int $tierPriceID): string
+    {
+        // There is no method to get just one tier price based on its ID, so we need to do it this way.
+        foreach ($product->getTierPrices() as $tier) {
+            if( (int) $tier['price_id'] === $tierPriceID) {
+                $basePrice = $this->getBasePrice($product, $tier['price']);
+
+                if ( ! $basePrice) {
+                    break;
+                }
+
+                return str_replace(
+                    '{REF_UNIT}', $this->getReferenceUnit($product), str_replace(
+                    '{REF_AMOUNT}', $this->getReferenceAmount($product), str_replace(
+                        '{BASE_PRICE}', $this->priceHelper->currency($basePrice), $template)
+                ));
+            }
+        }
+        return '';
+    }
+
+    /**
      * Returns the reference unit of current product
      *
      * @return string
