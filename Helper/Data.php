@@ -97,14 +97,14 @@ class Data extends AbstractHelper
      * @param Product $product
      * @return mixed
      */
-    public function getBasePriceText(Product $product)
+    public function getBasePriceText(Product $product, bool $useTierPrice = false)
     {
         $template = $this->scopeConfig->getValue(
             'baseprice/general/template',
             ScopeInterface::SCOPE_STORE
         );
 
-        $basePrice = $this->getBasePrice($product);
+        $basePrice = $this->getBasePrice($product, $useTierPrice);
 
         if (!$basePrice) return '';
 
@@ -137,12 +137,24 @@ class Data extends AbstractHelper
 
     /**
      * Calculates the base price for given product
+     * @param Product $product
+     * @param bool $useTierPrice
      *
-     * @return float|string
+     * @return float|int
      */
-    public function getBasePrice(Product $product)
+    public function getBasePrice(Product $product, bool $useTierPrice)
     {
-        $productPrice = round($product->getPriceInfo()->getPrice('final_price')->getAmount()->getValue(), PriceCurrencyInterface::DEFAULT_PRECISION);
+        if($useTierPrice) {
+            $tierprice = $product->getTierPrice();
+            // FIXME: How to get the baseprices for all tier prices, not just one?
+            if (count($tierprice) > 0 && isset($tierprice[0]['price'])) {
+                $price = $tierprice[0]['price'];
+            }
+        } else {
+            $price = $product->getPriceInfo()->getPrice('final_price')->getAmount()->getValue();
+        }
+
+        $productPrice = round($price, PriceCurrencyInterface::DEFAULT_PRECISION);
         $conversion = $this->getConversion($product);
         $referenceAmount = $product->getData('baseprice_reference_amount');
         $productAmount = $product->getData('baseprice_product_amount');
