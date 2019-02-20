@@ -97,14 +97,14 @@ class Data extends AbstractHelper
      * @param Product $product
      * @return mixed
      */
-    public function getBasePriceText(Product $product, bool $useTierPrice = false)
+    public function getBasePriceText(Product $product)
     {
         $template = $this->scopeConfig->getValue(
             'baseprice/general/template',
             ScopeInterface::SCOPE_STORE
         );
 
-        $basePrice = $this->getBasePrice($product, $useTierPrice);
+        $basePrice = $this->getBasePrice($product);
 
         if (!$basePrice) return '';
 
@@ -113,6 +113,35 @@ class Data extends AbstractHelper
             '{REF_AMOUNT}', $this->getReferenceAmount($product), str_replace(
                 '{BASE_PRICE}', $this->priceHelper->currency($basePrice), $template)
         ));
+    }
+
+    /**
+     * Returns an array with the base prices for all tier prices. Uses the tier price id as index.
+     * @param Product $product
+     *
+     * @return array
+     */
+    public function getTierBasePricesText(Product $product):array
+    {
+        $template = $this->scopeConfig->getValue(
+            'baseprice/general/template',
+            ScopeInterface::SCOPE_STORE
+        );
+
+        $tierPricesTexts = [];
+        foreach ($product->getTierPrice() as $tier) {
+            $basePrice = $this->getBasePrice($product, $tier['price']);
+
+            if (!$basePrice) continue;
+
+            $tierPricesTexts[$tier['price_id']] = str_replace(
+                '{REF_UNIT}', $this->getReferenceUnit($product), str_replace(
+                '{REF_AMOUNT}', $this->getReferenceAmount($product), str_replace(
+                    '{BASE_PRICE}', $this->priceHelper->currency($basePrice), $template)
+            ));
+        }
+
+        return $tierPricesTexts;
     }
 
     /**
@@ -138,19 +167,14 @@ class Data extends AbstractHelper
     /**
      * Calculates the base price for given product
      * @param Product $product
-     * @param bool $useTierPrice
+     * @param float $amount Optional amount. Used to calculate the tier prices.
      *
      * @return float|int
      */
-    public function getBasePrice(Product $product, bool $useTierPrice)
+    public function getBasePrice(Product $product, float $amount = 0)
     {
-        if($useTierPrice) {
-            $tierprice = $product->getTierPrice();
-            // FIXME: How to get the baseprices for all tier prices, not just one?
-            if (count($tierprice) > 0 && isset($tierprice[0]['price'])) {
-                $price = $tierprice[0]['price'];
-            }
-        } else {
+        $price = $amount;
+        if($amount == 0) {
             $price = $product->getPriceInfo()->getPrice('final_price')->getAmount()->getValue();
         }
 
