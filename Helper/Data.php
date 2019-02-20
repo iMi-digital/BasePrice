@@ -169,7 +169,7 @@ class Data extends AbstractHelper
      * @param Product $product
      * @param float $amount Optional amount. Used to calculate the tier prices.
      *
-     * @return float|int
+     * @return float
      */
     public function getBasePrice(Product $product, float $amount = 0)
     {
@@ -188,6 +188,6 @@ class Data extends AbstractHelper
             $basePrice = $productPrice * $conversion * $referenceAmount / $productAmount;
         }
 
-        return $basePrice;
+        return (float) $basePrice;
     }
 }
