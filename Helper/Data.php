@@ -150,14 +150,7 @@ class Data extends AbstractHelper
      */
     public function getTierBasePriceText(Product $product, int $tierPriceID): string
     {
-
-        //$tiers = $product->getTierPrices();
-        //$product->getTierPrice();
-        // There is no method to get just one tier price based on its ID, so we need to do it this way.
         foreach ($product->getTierPrice() as $tier) {
-            //$t2 = $tier->getId();
-            // TODO: get the tier price ID to compare against the requested
-            // $t1 = $tier['price_id'];
             if( (int) $tier['price_id'] === $tierPriceID) {
                 $basePrice = $this->getBasePrice($product, $tier['price']);
 
