@@ -91,6 +91,13 @@ class Data extends AbstractHelper
         return 1;
     }
 
+    private function getBasepriceLayoutTemplate(): string {
+        return $this->scopeConfig->getValue(
+            'baseprice/general/template',
+            ScopeInterface::SCOPE_STORE
+        );
+    }
+
     /**
      * Returns the base price text according to the configured template
      *
@@ -99,11 +106,6 @@ class Data extends AbstractHelper
      */
     public function getBasePriceText(Product $product)
     {
-        $template = $this->scopeConfig->getValue(
-            'baseprice/general/template',
-            ScopeInterface::SCOPE_STORE
-        );
-
         $basePrice = $this->getBasePrice($product);
 
         if (!$basePrice) return '';
@@ -111,7 +113,7 @@ class Data extends AbstractHelper
         return str_replace(
             '{REF_UNIT}', $this->getReferenceUnit($product), str_replace(
             '{REF_AMOUNT}', $this->getReferenceAmount($product), str_replace(
-                '{BASE_PRICE}', $this->priceHelper->currency($basePrice), $template)
+                '{BASE_PRICE}', $this->priceHelper->currency($basePrice), $this->getBasepriceLayoutTemplate())
         ));
     }
 
@@ -123,11 +125,6 @@ class Data extends AbstractHelper
      */
     public function getTierBasePricesText(Product $product):array
     {
-        $template = $this->scopeConfig->getValue(
-            'baseprice/general/template',
-            ScopeInterface::SCOPE_STORE
-        );
-
         $tierPricesTexts = [];
         foreach ($product->getTierPrice() as $tier) {
             $basePrice = $this->getBasePrice($product, $tier['price']);
@@ -137,7 +134,7 @@ class Data extends AbstractHelper
             $tierPricesTexts[$tier['price_id']] = str_replace(
                 '{REF_UNIT}', $this->getReferenceUnit($product), str_replace(
                 '{REF_AMOUNT}', $this->getReferenceAmount($product), str_replace(
-                    '{BASE_PRICE}', $this->priceHelper->currency($basePrice), $template)
+                    '{BASE_PRICE}', $this->priceHelper->currency($basePrice), $this->getBasepriceLayoutTemplate())
             ));
         }
 
@@ -154,11 +151,13 @@ class Data extends AbstractHelper
     public function getTierBasePriceText(Product $product, int $tierPriceID): string
     {
 
-        $tiers = $product->getTierPrices();
+        //$tiers = $product->getTierPrices();
+        //$product->getTierPrice();
         // There is no method to get just one tier price based on its ID, so we need to do it this way.
-        foreach ($product->getTierPrices() as $tier) {
-            $t2 = $tier->getId();
+        foreach ($product->getTierPrice() as $tier) {
+            //$t2 = $tier->getId();
             // TODO: get the tier price ID to compare against the requested
+            // $t1 = $tier['price_id'];
             if( (int) $tier['price_id'] === $tierPriceID) {
                 $basePrice = $this->getBasePrice($product, $tier['price']);
 
@@ -169,7 +168,7 @@ class Data extends AbstractHelper
                 return str_replace(
                     '{REF_UNIT}', $this->getReferenceUnit($product), str_replace(
                     '{REF_AMOUNT}', $this->getReferenceAmount($product), str_replace(
-                        '{BASE_PRICE}', $this->priceHelper->currency($basePrice), $template)
+                        '{BASE_PRICE}', $this->priceHelper->currency($basePrice), $this->getBasepriceLayoutTemplate())
                 ));
             }
         }
