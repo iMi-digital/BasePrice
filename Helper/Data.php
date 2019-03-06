@@ -104,6 +104,7 @@ class Data extends AbstractHelper
             ScopeInterface::SCOPE_STORE
         );
 
+        $name = $product->getName();
         $basePrice = $this->getBasePrice($product);
 
         if (!$basePrice) return '';
