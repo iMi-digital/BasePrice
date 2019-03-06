@@ -24,8 +24,6 @@
     <div class="baseprice">
         <?php echo $block->getBasePrice() ?>
     </div>
-
-<?php endif; ?>
     <?php if ($block->isConfigurable()): ?>
         <script type="text/javascript">
             require(['jquery', 'jquery/ui', 'domReady!'], function($) {
@@ -56,7 +54,6 @@
                     }
 
                     var basePriceField = $('.product-info-price .baseprice');
-                    console.log(result);
                     if (typeof result != 'undefined' && result.magenerds_baseprice_text.length && basePriceField.length) {
                         basePriceField.html(result.magenerds_baseprice_text);
                     }
@@ -64,3 +61,4 @@
             });
         </script>
     <?php endif; ?>
+<?php endif; ?>
