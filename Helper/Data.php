@@ -17,6 +17,7 @@
  */
 namespace Magenerds\BasePrice\Helper;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
@@ -143,12 +144,12 @@ class Data extends AbstractHelper
 
     /**
      * Returns the base price for a tier price by its ID.
-     * @param Product $product
+     * @param ProductInterface $product
      * @param int $tierPriceID
      *
      * @return string
      */
-    public function getTierBasePriceText(Product $product, int $tierPriceID): string
+    public function getTierBasePriceText(ProductInterface $product, int $tierPriceID): string
     {
         foreach ($product->getTierPrice() as $tier) {
             if( (int) $tier['price_id'] === $tierPriceID) {
