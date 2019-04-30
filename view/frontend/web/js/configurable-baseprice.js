@@ -32,7 +32,7 @@ require([
         }
 
         var basePriceField = $('.product-info-price .baseprice');
-        if (typeof result != 'undefined' && result.magenerds_baseprice_text.length && basePriceField.length) {
+        if (typeof result != 'undefined' && basePriceField.length) {
             basePriceField.html(result.magenerds_baseprice_text);
         }
     });
