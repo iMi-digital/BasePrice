@@ -21,9 +21,7 @@
  */
 ?>
 <?php if ($block->isEnabled()): ?>
-    <div class="baseprice">
-        <?php echo $block->getBasePrice() ?>
-    </div>
+    <div class="baseprice"><?php echo $block->getBasePrice() ?></div>
     <?php if ($block->isConfigurable()): ?>
         <script type="text/x-magento-init">
         {
