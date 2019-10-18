@@ -138,4 +138,8 @@ class AfterPrice extends \Magento\Framework\View\Element\Template
     {
         return $this->_helper->getTierBasePricesText($this->getProduct(), true);
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> b869307a3dff204c5644aec6d6cfb9e5456eb5b8

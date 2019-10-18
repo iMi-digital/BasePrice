@@ -144,12 +144,20 @@ class Data extends AbstractHelper
 
     /**
      * Returns the base price for a tier price by its ID.
+<<<<<<< HEAD
      * @param ProductInterface $product
+=======
+     * @param Product $product
+>>>>>>> b869307a3dff204c5644aec6d6cfb9e5456eb5b8
      * @param int $tierPriceID
      *
      * @return string
      */
+<<<<<<< HEAD
     public function getTierBasePriceText(ProductInterface $product, int $tierPriceID): string
+=======
+    public function getTierBasePriceText(Product $product, int $tierPriceID): string
+>>>>>>> b869307a3dff204c5644aec6d6cfb9e5456eb5b8
     {
         foreach ($product->getTierPrice() as $tier) {
             if( (int) $tier['price_id'] === $tierPriceID) {
