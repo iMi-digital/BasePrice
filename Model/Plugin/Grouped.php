@@ -11,8 +11,8 @@
  * @category   Magenerds
  * @package    Magenerds_BasePrice
  * @subpackage Model
- * @copyright  Copyright (c) 2017 TechDivision GmbH (http://www.techdivision.com)
- * @link       http://www.techdivision.com/
+ * @copyright  Copyright (c) 2019 TechDivision GmbH (https://www.techdivision.com)
+ * @link       https://www.techdivision.com/
  * @author     Florian Sydekum <f.sydekum@techdivision.com>
  */
 namespace Magenerds\BasePrice\Model\Plugin;
@@ -40,7 +40,7 @@ class Grouped extends CoreGrouped
                 $product
             )->addAttributeToSelect(
                 [
-                    'name', 'price',  'special_price', 'special_from_date', 'special_to_date',
+                    'name', 'price', 'special_price', 'special_from_date', 'special_to_date', 'tax_class_id', 'image',
                     'baseprice_reference_amount', 'baseprice_product_amount', 'baseprice_product_unit', 'baseprice_reference_unit', 'baseprice_reference_amount'
                 ]
             )->addFilterByRequiredOptions()->setPositionOrder()->addStoreFilter(
